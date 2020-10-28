@@ -1,16 +1,13 @@
 function computerPlay(){
     // get random number from 1 to 3
     const number = Math.floor(Math.random() * 3);
-    let result = "";
-    // assign numbers to rock/paper/scissors
-    if(number === 1){
-        result = "rock";
-    }else if(number === 2){
-        result = "paper";
-    }else{
-        result = "scissors";
-    }
-    // return result
+
+    // make array of choices
+    const choices = ["rock", "paper", "scissors"];
+
+    // result is array item at random number
+    result = choices[(number)];
+
     return result;
 }
 
@@ -43,38 +40,78 @@ function playRound(playerSelection, computerSelection) {
     return resultText;
 }
 
-function game(){
-    //initialise variables for score
-    let playerScore = 0;
-    let computerScore = 0;
+function displayResults(){
+    // make variables for DOM items
+    const resultsDiv = document.querySelector("#results");
+    const playerDiv = document.querySelector("#playerSelection");
+    const computerDiv = document.querySelector("#computerSelection");
 
-    //loop through 5 rounds
-    for(let i = 0; i < 5; i++){
+    const resultsParagraph = document.createElement('p');
+    const playerChoice = document.createElement('p');
+    const computerChoice = document.createElement('p')
 
-        //prompt player for pick and set computer pick
-        const playerSelection = prompt("rock, paper, or scissors?");
-        const computerSelection = computerPlay();
 
-        //play a round
-        const game = playRound(playerSelection, computerSelection);
+    let computerSelection = computerPlay();
 
-        //determine who won and award point
-        if(game.includes("Win")){
-            playerScore ++;
-        }else if(game.includes("Lose")){
-            computerScore ++;
-        }
+    // get results from game and display them
+    resultText = playRound(playerSelection, computerSelection);
+    resultsParagraph.textContent = resultText;
+    resultsDiv.appendChild(resultsParagraph);
 
-        //update player on details of the round
-        console.log("You chose " + playerSelection.toUpperCase() + " Computer chose: " + computerSelection.toUpperCase() + "......", game, "Player Score: " + playerScore + " Computer Score: " + computerScore);
+    // show player choice & computer choice
+    playerChoice.textContent = "You have chosen: " + playerSelection;
+    playerDiv.appendChild(playerChoice);
+
+    computerChoice.textContent = "The computer has chosen: " + computerSelection;
+    computerDiv.appendChild(computerChoice);
+
+    //detect who won and add to score
+    if(resultText.includes("You Win!")){
+        playerScore++;
+    }else if(resultText.includes("You Lose!")){
+        computerScore++;
+    };
+
+    //display score
+    if(playerScore === 5){
+        score.textContent = "YOU WIN! " + "Player: " + playerScore + " Computer: " + computerScore;;
+    }else if(computerScore === 5){
+        score.textContent = "YOU LOSE! " + "Player: " + playerScore + " Computer: " + computerScore;;
+    }else {
+        score.textContent = "Player: " + playerScore + " Computer: " + computerScore;
     }
-
-    // returns the final score of the game in text
-    return "Game Over!  Player: " + playerScore + "  Computer: " + computerScore;
+    scoreDiv.appendChild(score);
 }
 
 
+//initialise variables for score
+let playerScore = 0;
+let computerScore = 0;
 
+//score display
+const scoreDiv = document.querySelector(".title");
+const score = document.createElement('p');
 
+//add query selectors for each button
+const btnRock = document.querySelector("#btn-rock");
+const btnPaper = document.querySelector("#btn-paper");
+const btnScissors = document.querySelector("#btn-scissors");
+const btnGame = document.querySelector("#btn-playGame");
 
+//associate each button with a choice for the game
+btnRock.addEventListener('click', () => {
+    playerSelection = "Rock";
+    displayResults();});
 
+btnPaper.addEventListener('click', () => {
+    playerSelection = "Paper";
+    displayResults();});
+
+btnScissors.addEventListener('click', () => {
+    playerSelection = "Scissors";
+    displayResults();
+});
+
+btnGame.addEventListener('click', () =>{
+    game();
+})
